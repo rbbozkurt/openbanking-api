@@ -1,16 +1,19 @@
 #!/bin/bash
 
-echo "🔍 Running ktlint..."
+echo "🧹 Auto-fixing code with ktlintFormat..."
+./gradlew ktlintFormat
+
+echo "🔍 Running ktlintCheck..."
 ./gradlew ktlintCheck
 if [ $? -ne 0 ]; then
-  echo "❌ ktlint failed. Fix formatting before committing."
+  echo "❌ ktlint check failed even after auto-format. Please fix manually."
   exit 1
 fi
 
 echo "🔍 Running detekt..."
 ./gradlew detekt
 if [ $? -ne 0 ]; then
-  echo "❌ detekt failed. Fix code issues before committing."
+  echo "❌ detekt check failed. Please fix before committing."
   exit 1
 fi
 
