@@ -1,0 +1,17 @@
+#!/bin/bash
+
+echo "🔍 Running ktlint..."
+./gradlew ktlintCheck
+if [ $? -ne 0 ]; then
+  echo "❌ ktlint failed. Fix formatting before committing."
+  exit 1
+fi
+
+echo "🔍 Running detekt..."
+./gradlew detekt
+if [ $? -ne 0 ]; then
+  echo "❌ detekt failed. Fix code issues before committing."
+  exit 1
+fi
+
+echo "✅ All checks passed. Proceeding with commit."

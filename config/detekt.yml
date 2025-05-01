@@ -1,0 +1,32 @@
+build:
+  maxIssues: 10
+  excludeCorrectable: false
+
+processors:
+  active: true
+  exclude:
+    - 'DetektProgressListener'
+
+config:
+  validation: true
+
+console-reports:
+  active: true
+  exclude:
+    - 'ProjectStatisticsReport'
+    - 'ComplexityReport'
+
+output-reports:
+  active: true
+  exclude: []
+
+style:
+  MagicNumber:
+    active: false
+  WildcardImport:
+    active: false
+  OptionalUnit:
+    active: true
+  MaxLineLength:
+    active: true
+    maxLineLength: 140
