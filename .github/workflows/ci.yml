@@ -38,12 +38,11 @@ jobs:
       - name: Build and Test
         run: ./gradlew clean build
 
-      - name: Upload test report
-        if: always()
+      - name: Upload JAR artifact
         uses: actions/upload-artifact@v4
         with:
-          name: test-report
-          path: build/reports/tests/test/index.html
+          name: app-jar
+          path: build/libs/*.jar
 
   lint:
     name: Lint (ktlint)
@@ -77,6 +76,12 @@ jobs:
       - name: Run detekt
         run: ./gradlew detekt
 
+      - name: Upload SARIF report
+        if: always()
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: build/reports/detekt/detekt.sarif
+
   docker:
     name: Docker Build
     runs-on: ubuntu-latest
@@ -84,6 +89,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Download JAR from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: app-jar
 
       - name: Build Docker image
         run: docker build -t openbanking-api:latest .
