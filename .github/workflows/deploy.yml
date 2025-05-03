@@ -4,11 +4,8 @@
 name: Deploy
 
 on:
-  workflow_run:
-    workflows: ["Quality Check & Build"]
-    branches: [main]
-    types:
-      - completed
+  push:
+    branches: ["main"]
 
 env:
   GCP_REGION: europe-west3
@@ -16,7 +13,6 @@ env:
   GCP_SERVICE: openbanking-api
   GCP_REPOSITORY: openbanking-api
   IMAGE_PATH: europe-west3-docker.pkg.dev/openbanking-api-458712/openbanking-api/openbanking-api
-  API_URL: https://openbanking-api-826260723607.europe-west3.run.app
 
 jobs:
   deploy:
@@ -25,6 +21,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
@@ -38,17 +35,8 @@ jobs:
       - name: Configure Docker for GCP
         run: gcloud auth configure-docker ${{ env.GCP_REGION }}-docker.pkg.dev
 
-      - name: Download JAR artifact from build run
-        uses: actions/download-artifact@v4
-        with:
-          name: app-jar
-          path: downloaded-jar
-
-
-      - name: Prepare JAR for Docker build
-        run: |
-          mkdir -p build/libs
-          cp downloaded-jar/*.jar build/libs/
+      - name: Build Project
+        run: ./gradlew clean bootJar
 
       - name: Set unique image tag (timestamp + short SHA)
         id: vars
@@ -74,4 +62,4 @@ jobs:
             --role=roles/run.invoker
 
       - name: Deployment Complete
-        run: echo "✅ Successfully deployed to Cloud Run -> ${{ env.API_URL }}"
+        run: echo "✅ Successfully deployed to Cloud Run -> https://${{ env.GCP_SERVICE }}-${{ secrets.GCP_PROJECT_NUMBER }}.${{ env.GCP_REGION }}.run.app"
