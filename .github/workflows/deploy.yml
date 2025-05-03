@@ -106,7 +106,7 @@ jobs:
           body: |
             ✅ Successfully deployed to Cloud Run!
 
-            🔗 [API URL](${{ env.API_URL }})
+            🔗 [${{ env.API_URL }}](${{ env.API_URL }})
 
             📦 Docker Image: `${{ env.IMAGE_PATH }}:${{ needs.setup.outputs.tag }}`
         env:
