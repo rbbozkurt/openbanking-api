@@ -1,9 +1,6 @@
 # =======================================
 # deploy.yml - Main branch deploy only
 # =======================================
-# =======================================
-# deploy.yml - Main branch deploy only
-# =======================================
 name: Deploy
 
 on:
@@ -21,7 +18,7 @@ env:
   JAVA_DISTRIBUTION: temurin
 
 permissions:
-  contents: read
+  contents: write
   id-token: write
 
 jobs:
