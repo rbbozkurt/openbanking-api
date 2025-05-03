@@ -34,6 +34,8 @@ jobs:
         with:
           name: app-jar
           path: build/libs/*.jar
+          retention-days: 1
+
 
   lint:
     name: Lint (ktlint)

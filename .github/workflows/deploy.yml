@@ -38,11 +38,12 @@ jobs:
       - name: Configure Docker for GCP
         run: gcloud auth configure-docker ${{ env.GCP_REGION }}-docker.pkg.dev
 
-      - name: Download JAR artifact
+      - name: Download JAR artifact from build run
         uses: actions/download-artifact@v4
         with:
           name: app-jar
           path: downloaded-jar
+
 
       - name: Prepare JAR for Docker build
         run: |
