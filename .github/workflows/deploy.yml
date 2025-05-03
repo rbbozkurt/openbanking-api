@@ -47,8 +47,15 @@ jobs:
           region: europe-west3
           allow-unauthenticated: true
 
+      - name: Allow unauthenticated access
+        run: |
+          gcloud run services add-iam-policy-binding openbanking-api \
+            --region=europe-west3 \
+            --member=allUsers \
+            --role=roles/run.invoker
+
       - name: Deployment Complete
         run:
-          echo "✅ Successfully deployed to Cloud Run: https://openbanking-api-${{ secrets.GCP_PROJECT_NUMBER }}.europe-west3.run.app"
+          echo "✅ Successfully deployed to Cloud Run -> https://openbanking-api-${{ secrets.GCP_PROJECT_NUMBER }}.europe-west3.run.app"
 
 
