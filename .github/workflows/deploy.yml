@@ -30,9 +30,9 @@ jobs:
       - name: Build Project
         run: ./gradlew clean bootJar
 
-      - name: Set Git SHA
+      - name: Set unique image tag (timestamp + short SHA)
         id: vars
-        run: echo "sha_short=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+        run: echo "tag=$(date +%s)-$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
 
       - name: Build and Push Docker Image
         run: |
