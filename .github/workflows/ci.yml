@@ -29,6 +29,11 @@ jobs:
           restore-keys: ${{ runner.os }}-gradle
       - run: chmod +x ./gradlew
       - run: ./gradlew clean build
+      - name: Upload JAR artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-jar
+          path: build/libs/*.jar
 
   lint:
     name: Lint (ktlint)
