@@ -36,13 +36,13 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t europe-west3-docker.pkg.dev/openbanking-api-458712/openbanking-api/openbanking-api:${{ steps.vars.outputs.sha_short }} .
-          docker push europe-west3-docker.pkg.dev/openbanking-api-458712/openbanking-api/openbanking-api:${{ steps.vars.outputs.sha_short }}
+          docker build -t europe-west3-docker.pkg.dev/openbanking-api-458712/openbanking-api/openbanking-api:${{ steps.vars.outputs.tag }} .
+          docker push europe-west3-docker.pkg.dev/openbanking-api-458712/openbanking-api/openbanking-api:${{ steps.vars.outputs.tag }}
 
       - name: Deploy to Cloud Run
         uses: google-github-actions/deploy-cloudrun@v2
         with:
           service: openbanking-api
-          image: europe-west3-docker.pkg.dev/openbanking-api-458712/openbanking-api/openbanking-api:${{ steps.vars.outputs.sha_short }}
+          image: europe-west3-docker.pkg.dev/openbanking-api-458712/openbanking-api/openbanking-api:${{ steps.vars.outputs.tag }}
           region: europe-west3
 
