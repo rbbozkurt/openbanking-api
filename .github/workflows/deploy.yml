@@ -13,6 +13,7 @@ env:
   GCP_SERVICE: openbanking-api
   GCP_REPOSITORY: openbanking-api
   IMAGE_PATH: europe-west3-docker.pkg.dev/openbanking-api-458712/openbanking-api/openbanking-api
+  API_URL: https://openbanking-api-826260723607.europe-west3.run.app
 
 jobs:
   deploy:
@@ -62,4 +63,4 @@ jobs:
             --role=roles/run.invoker
 
       - name: Deployment Complete
-        run: echo "✅ Successfully deployed to Cloud Run -> https://${{ env.GCP_SERVICE }}-${{ secrets.GCP_PROJECT_NUMBER }}.${{ env.GCP_REGION }}.run.app"
+        run: echo "✅ Successfully deployed to Cloud Run -> ${{ env.API_URL }}"
