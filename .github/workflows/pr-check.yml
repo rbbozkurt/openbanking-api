@@ -1,0 +1,24 @@
+# =======================================
+# pr-check.yml - On PR to main only
+# =======================================
+name: PR Check
+
+on:
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  docker-start:
+    name: Validate Docker Image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Project
+        run: ./gradlew clean build
+      - name: Build Docker Image
+        run: docker build -t openbanking-api:pr-test .
+      - name: Run Docker Container (Smoke Test)
+        run: |
+          docker run -d --rm -p 8080:8080 openbanking-api:pr-test
+          sleep 10
+          curl --fail http://localhost:8080 || (echo "❌ Health check failed" && exit 1)
