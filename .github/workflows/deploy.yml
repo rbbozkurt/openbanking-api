@@ -45,4 +45,10 @@ jobs:
           service: openbanking-api
           image: europe-west3-docker.pkg.dev/openbanking-api-458712/openbanking-api/openbanking-api:${{ steps.vars.outputs.tag }}
           region: europe-west3
+          allow-unauthenticated: true
+
+      - name: Deployment Complete
+        run:
+          echo "✅ Successfully deployed to Cloud Run: https://openbanking-api-${{ secrets.GCP_PROJECT_NUMBER }}.europe-west3.run.app"
+
 
