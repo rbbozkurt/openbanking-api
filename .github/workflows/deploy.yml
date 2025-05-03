@@ -30,14 +30,19 @@ jobs:
       - name: Build Project
         run: ./gradlew clean bootJar
 
+      - name: Set Git SHA
+        id: vars
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+
       - name: Build and Push Docker Image
         run: |
-          docker build -t europe-west3-docker.pkg.dev/openbanking-api-458712/openbanking-api/openbanking-api:latest .
-          docker push europe-west3-docker.pkg.dev/openbanking-api-458712/openbanking-api/openbanking-api:latest
+          docker build -t europe-west3-docker.pkg.dev/openbanking-api-458712/openbanking-api/openbanking-api:${{ steps.vars.outputs.sha_short }} .
+          docker push europe-west3-docker.pkg.dev/openbanking-api-458712/openbanking-api/openbanking-api:${{ steps.vars.outputs.sha_short }}
 
       - name: Deploy to Cloud Run
         uses: google-github-actions/deploy-cloudrun@v2
         with:
           service: openbanking-api
-          image: europe-west3-docker.pkg.dev/openbanking-api-458712/openbanking-api/openbanking-api:latest
+          image: europe-west3-docker.pkg.dev/openbanking-api-458712/openbanking-api/openbanking-api:${{ steps.vars.outputs.sha_short }}
           region: europe-west3
+
