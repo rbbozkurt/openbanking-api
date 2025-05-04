@@ -21,4 +21,4 @@ jobs:
         run: |
           docker run -d --rm -p 8080:8080 openbanking-api:pr-test
           sleep 10
-          curl --fail http://localhost:8080 || (echo "❌ Health check failed" && exit 1)
+          curl --fail http://localhost:8080/health || (echo "❌ Health check failed" && exit 1)
