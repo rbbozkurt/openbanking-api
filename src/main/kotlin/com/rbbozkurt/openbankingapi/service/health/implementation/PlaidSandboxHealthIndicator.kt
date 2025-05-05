@@ -16,8 +16,8 @@ class PlaidSandboxHealthIndicator : HealthIndicator {
 
     override fun isHealthy(): HealthCheckResult {
         return try {
-            throw UnsupportedOperationException("$indicatorName is not yet implemented.")
-        } catch (ex: UnsupportedOperationException) {
+            throw NotImplementedError("$indicatorName is not yet implemented.")
+        } catch (ex: NotImplementedError) {
             HealthCheckResult(indicatorName, false, "$indicatorName failed: ${ex.message}")
         }
     }
