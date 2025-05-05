@@ -20,15 +20,16 @@ class HealthController(
             if (isAllHealthy) {
                 HealthStatusResponseDto.serviceAvailable()
                     .withMessage("Service is up and running")
+                    .withData(null)
             } else {
                 HealthStatusResponseDto.serviceUnavailable()
                     .withMessage("One or more services are down")
+                    .withData(healthChecks)
             }
 
         val response =
             responseBuilder
                 .atEndpoint(request.requestURI)
-                .withData(healthChecks)
                 .build()
 
         val httpStatus = if (isAllHealthy) 200 else 503
