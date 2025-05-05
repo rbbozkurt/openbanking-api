@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component
 @ConditionalOnProperty(
     name = ["health.plaid.sandbox.enabled"],
     havingValue = "true",
-    matchIfMissing = false
+    matchIfMissing = false,
 )
 class PlaidSandboxHealthIndicator : HealthIndicator {
     override val indicatorName: String = "Plaid Sandbox"

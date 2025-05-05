@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component
 @ConditionalOnProperty(
     name = ["health.plaid.enabled"],
     havingValue = "true",
-    matchIfMissing = false
+    matchIfMissing = false,
 )
 class PlaidHealthIndicator : HealthIndicator {
     override val indicatorName: String = "Plaid API"
