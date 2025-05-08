@@ -12,26 +12,27 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/users")
 class CreditScoreController(
-    private val creditScoreService: CreditScoreService
+    private val creditScoreService: CreditScoreService,
 ) {
     @GetMapping("/{userId}/credit-score")
     fun getCreditScoreByPath(
         @PathVariable userId: String,
-        request: HttpServletRequest
+        request: HttpServletRequest,
     ): ResponseEntity<CreditScoreResponseDto> {
         val creditScore = creditScoreService.getCreditScore(userId)
 
-        val response = if (creditScore != null) {
-            CreditScoreResponseDto.success()
-                .withData(creditScore)
-                .atEndpoint(request.requestURI)
-                .build()
-        } else {
-            CreditScoreResponseDto.success()
-                .withMessage("Credit score not found for user: $userId")
-                .atEndpoint(request.requestURI)
-                .build()
-        }
+        val response =
+            if (creditScore != null) {
+                CreditScoreResponseDto.success()
+                    .withData(creditScore)
+                    .atEndpoint(request.requestURI)
+                    .build()
+            } else {
+                CreditScoreResponseDto.success()
+                    .withMessage("Credit score not found for user: $userId")
+                    .atEndpoint(request.requestURI)
+                    .build()
+            }
 
         return ResponseEntity.ok(response)
     }

@@ -7,12 +7,11 @@ import org.springframework.stereotype.Service
 
 @Service
 class CreditScoreServiceImpl : CreditScoreService {
-
     override fun getCreditScore(userId: String): CreditScore? {
-       return if (userId.isNotBlank()) {
+        return if (userId.isNotBlank()) {
             CreditScore(
                 userId = userId,
-                score = CreditScoreValue((0..100).random()) // Random score between 0 and 100 for now
+                score = CreditScoreValue((0..100).random()), // Random score between 0 and 100 for now
             )
         } else {
             null

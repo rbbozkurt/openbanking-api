@@ -4,5 +4,5 @@ data class CreditScoreValue(val value: Int)
 
 data class CreditScore(
     val userId: String,
-    val score: CreditScoreValue
+    val score: CreditScoreValue,
 )
