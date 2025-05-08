@@ -3,6 +3,7 @@ package com.rbbozkurt.openbankingapi.controller.creditscore
 import com.rbbozkurt.openbankingapi.dto.creditscore.CreditScoreResponseDto
 import com.rbbozkurt.openbankingapi.service.creditscore.interfaces.CreditScoreService
 import jakarta.servlet.http.HttpServletRequest
+import jakarta.validation.constraints.NotBlank
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -16,7 +17,7 @@ class CreditScoreController(
 ) {
     @GetMapping("/{userId}/credit-score")
     fun getCreditScoreByPath(
-        @PathVariable userId: String,
+        @PathVariable @NotBlank(message = "User ID must not be blank") userId: String,
         request: HttpServletRequest,
     ): ResponseEntity<CreditScoreResponseDto> {
         val creditScore = creditScoreService.getCreditScore(userId)
