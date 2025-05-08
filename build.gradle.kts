@@ -68,6 +68,12 @@ ktlint {
     outputColorName.set("RED")
 }
 
+tasks.withType<org.jlleitschuh.gradle.ktlint.tasks.BaseKtLintCheckTask>().configureEach {
+    dependsOn(tasks.named("kaptKotlin"))
+}
+
+
+
 detekt {
     toolVersion = "1.23.6"
     config.setFrom(files("$rootDir/config/detekt.yml"))
@@ -88,5 +94,11 @@ tasks.withType<Detekt>().configureEach {
         xml.required.set(true) // checkstyle like format mainly for integrations like Jenkins
         sarif.required.set(true)
         md.required.set(true) // simple Markdown format
+    }
+}
+
+ktlint {
+    filter {
+        exclude("build/generated/**")
     }
 }
