@@ -1,39 +1,64 @@
-package com.rbbozkurt.openbankingapi.client.plaid.sandbox.implementation
+package com.rbbozkurt.openbankingapi.client.plaid.auth.sandbox.implementation
 
-import com.rbbozkurt.openbankingapi.client.plaid.dto.auth.CreatePublicTokenRequest
-import com.rbbozkurt.openbankingapi.client.plaid.dto.auth.CreatePublicTokenResponse
-import com.rbbozkurt.openbankingapi.client.plaid.dto.auth.ExchangeTokenRequest
-import com.rbbozkurt.openbankingapi.client.plaid.dto.auth.ExchangeTokenResponse
-import com.rbbozkurt.openbankingapi.client.plaid.interfaces.auth.PlaidAuthClient
+import com.rbbozkurt.openbankingapi.client.plaid.auth.dto.CreatePublicTokenRequest
+import com.rbbozkurt.openbankingapi.client.plaid.auth.dto.CreatePublicTokenResponse
+import com.rbbozkurt.openbankingapi.client.plaid.auth.dto.ExchangeTokenRequest
+import com.rbbozkurt.openbankingapi.client.plaid.auth.dto.ExchangeTokenResponse
+import com.rbbozkurt.openbankingapi.client.plaid.auth.exception.PlaidAuthClientException
+import com.rbbozkurt.openbankingapi.client.plaid.auth.interfaces.PlaidAuthClient
 import com.rbbozkurt.openbankingapi.config.plaid.PlaidProperties
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Mono
 
 @Component
+@Qualifier("plaidSandboxAuthClient")
 class PlaidSandboxAuthClient(
-    plaidProperties: PlaidProperties,
+    val plaidProperties: PlaidProperties,
 ) : PlaidAuthClient {
     private val webClient: WebClient =
         WebClient.builder()
-            .baseUrl(plaidProperties.sandboxBaseUrl)
+            .baseUrl(plaidProperties.sandbox.baseUrl)
             .defaultHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
             .build()
 
     override fun createSandboxPublicToken(request: CreatePublicTokenRequest): Mono<CreatePublicTokenResponse> {
         return webClient.post()
-            .uri("/sandbox/public_token/create")
+            .uri(plaidProperties.sandbox.endpoint.publicTokenCreate)
             .bodyValue(request)
             .retrieve()
+            .onStatus({ it.isError }) { response ->
+                response.bodyToMono(String::class.java).flatMap { errorBody ->
+                    Mono.error(
+                        PlaidAuthClientException(
+                            "Plaid API error: ${response.statusCode()}",
+                            response.statusCode(),
+                            details = errorBody,
+                        ),
+                    )
+                }
+            }
             .bodyToMono(CreatePublicTokenResponse::class.java)
     }
 
     override fun exchangePublicToken(request: ExchangeTokenRequest): Mono<ExchangeTokenResponse> {
         return webClient.post()
-            .uri("/item/public_token/exchange")
+            .uri(plaidProperties.sandbox.endpoint.publicTokenExchange)
             .bodyValue(request)
             .retrieve()
+            .onStatus({ it.isError }) { response ->
+                response.bodyToMono(String::class.java).flatMap { errorBody ->
+                    Mono.error(
+                        PlaidAuthClientException(
+                            "Plaid API error: ${response.statusCode()}",
+                            response.statusCode(),
+                            details = errorBody,
+                        ),
+                    )
+                }
+            }
             .bodyToMono(ExchangeTokenResponse::class.java)
     }
 }

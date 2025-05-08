@@ -1,4 +1,10 @@
 package com.rbbozkurt.openbankingapi.service.plaid.auth.exception
 
-class PlaidAuthServiceException {
-}
+/**
+ * Exception thrown by PlaidAuthService when authentication-related operations fail.
+ */
+class PlaidAuthServiceException(
+    message: String,
+    val details: Any? = "Unknown Error",
+    cause: Throwable? = null,
+) : RuntimeException(message, cause)

@@ -2,7 +2,7 @@ package com.rbbozkurt.openbankingapi.dto.plaid.auth
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-data class PlaidAuthResponse(
+data class PlaidAuthResponseDto(
     @JsonProperty("access_token")
     val accessToken: String,
     @JsonProperty("item_id")

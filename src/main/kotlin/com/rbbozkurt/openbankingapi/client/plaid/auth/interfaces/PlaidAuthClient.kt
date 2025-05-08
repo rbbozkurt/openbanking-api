@@ -1,9 +1,9 @@
-package com.rbbozkurt.openbankingapi.client.plaid.interfaces.auth
+package com.rbbozkurt.openbankingapi.client.plaid.auth.interfaces
 
-import com.rbbozkurt.openbankingapi.client.plaid.dto.auth.CreatePublicTokenRequest
-import com.rbbozkurt.openbankingapi.client.plaid.dto.auth.CreatePublicTokenResponse
-import com.rbbozkurt.openbankingapi.client.plaid.dto.auth.ExchangeTokenRequest
-import com.rbbozkurt.openbankingapi.client.plaid.dto.auth.ExchangeTokenResponse
+import com.rbbozkurt.openbankingapi.client.plaid.auth.dto.CreatePublicTokenRequest
+import com.rbbozkurt.openbankingapi.client.plaid.auth.dto.CreatePublicTokenResponse
+import com.rbbozkurt.openbankingapi.client.plaid.auth.dto.ExchangeTokenRequest
+import com.rbbozkurt.openbankingapi.client.plaid.auth.dto.ExchangeTokenResponse
 import reactor.core.publisher.Mono
 
 interface PlaidAuthClient {

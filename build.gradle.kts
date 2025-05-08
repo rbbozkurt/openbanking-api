@@ -3,6 +3,7 @@ import io.gitlab.arturbosch.detekt.Detekt
 plugins {
     kotlin("jvm") version "1.9.23"
     kotlin("plugin.spring") version "1.9.23"
+    kotlin("kapt") version "1.9.23"
     id("org.springframework.boot") version "3.4.5"
     id("io.spring.dependency-management") version "1.1.7"
     id("org.jlleitschuh.gradle.ktlint") version "11.6.1" // 🔧 Ktlint plugin
@@ -34,6 +35,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
+    implementation("org.mapstruct:mapstruct:1.6.0")
+    kapt("org.mapstruct:mapstruct-processor:1.6.0")
     compileOnly("org.projectlombok:lombok")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     developmentOnly("org.springframework.boot:spring-boot-docker-compose")
@@ -45,6 +49,9 @@ dependencies {
 }
 
 kotlin {
+    sourceSets.main {
+        kotlin.srcDirs("build/generated/source/kapt/main")
+    }
     compilerOptions {
         freeCompilerArgs.addAll("-Xjsr305=strict")
     }
@@ -69,6 +76,10 @@ detekt {
     baseline = file("$rootDir/config/detekt-baseline.xml")
     parallel = true
     autoCorrect = true
+}
+
+kapt {
+    correctErrorTypes = true
 }
 
 tasks.withType<Detekt>().configureEach {

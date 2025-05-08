@@ -1,4 +1,10 @@
 package com.rbbozkurt.openbankingapi.client.plaid.auth.exception
 
-class PlaidAuthClientException {
-}
+import org.springframework.http.HttpStatusCode
+
+class PlaidAuthClientException(
+    message: String,
+    val statusCode: HttpStatusCode,
+    val details: Any? = "Unknown Error",
+    cause: Throwable? = null,
+) : RuntimeException(message, cause)

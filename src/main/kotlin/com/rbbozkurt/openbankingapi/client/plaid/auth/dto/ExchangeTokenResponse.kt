@@ -1,4 +1,4 @@
-package com.rbbozkurt.openbankingapi.client.plaid.dto.auth
+package com.rbbozkurt.openbankingapi.client.plaid.auth.dto
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
