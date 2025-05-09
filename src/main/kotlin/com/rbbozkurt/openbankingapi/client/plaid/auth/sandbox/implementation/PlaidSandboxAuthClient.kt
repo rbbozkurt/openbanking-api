@@ -10,6 +10,7 @@ import com.rbbozkurt.openbankingapi.config.plaid.PlaidProperties
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
+import org.springframework.web.reactive.function.client.ClientResponse
 import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Mono
 
@@ -30,15 +31,7 @@ class PlaidSandboxAuthClient(
             .bodyValue(request)
             .retrieve()
             .onStatus({ it.isError }) { response ->
-                response.bodyToMono(String::class.java).flatMap { errorBody ->
-                    Mono.error(
-                        PlaidAuthClientException(
-                            "Plaid API error: ${response.statusCode()}",
-                            response.statusCode(),
-                            details = errorBody,
-                        ),
-                    )
-                }
+                handlePlaidApiError(response)
             }
             .bodyToMono(CreatePublicTokenResponse::class.java)
     }
@@ -49,16 +42,20 @@ class PlaidSandboxAuthClient(
             .bodyValue(request)
             .retrieve()
             .onStatus({ it.isError }) { response ->
-                response.bodyToMono(String::class.java).flatMap { errorBody ->
-                    Mono.error(
-                        PlaidAuthClientException(
-                            "Plaid API error: ${response.statusCode()}",
-                            response.statusCode(),
-                            details = errorBody,
-                        ),
-                    )
-                }
+                handlePlaidApiError(response)
             }
             .bodyToMono(ExchangeTokenResponse::class.java)
+    }
+
+    private fun handlePlaidApiError(response: ClientResponse): Mono<Throwable> {
+        return response.bodyToMono(String::class.java).flatMap { errorBody ->
+            Mono.error(
+                PlaidAuthClientException(
+                    "Plaid API error: ${response.statusCode()}",
+                    response.statusCode(),
+                    details = errorBody,
+                ),
+            )
+        }
     }
 }
