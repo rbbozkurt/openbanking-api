@@ -5,14 +5,16 @@ import com.rbbozkurt.openbankingapi.service.health.interfaces.HealthCheckService
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
+@RequestMapping("/health")
 class HealthController(
     private val healthCheckService: HealthCheckService,
 ) {
-    @GetMapping("/health")
-    fun health(request: HttpServletRequest): ResponseEntity<HealthStatusResponseDto> {
+    @GetMapping()
+    fun checkHealth(request: HttpServletRequest): ResponseEntity<HealthStatusResponseDto> {
         val healthChecks = healthCheckService.checkAll()
         val isAllHealthy = healthChecks.all { it.isHealthy }
 

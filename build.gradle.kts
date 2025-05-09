@@ -3,9 +3,10 @@ import io.gitlab.arturbosch.detekt.Detekt
 plugins {
     kotlin("jvm") version "1.9.23"
     kotlin("plugin.spring") version "1.9.23"
+    kotlin("kapt") version "1.9.23"
     id("org.springframework.boot") version "3.4.5"
     id("io.spring.dependency-management") version "1.1.7"
-    id("org.jlleitschuh.gradle.ktlint") version "11.6.1" // 🔧 Ktlint plugin
+    id("org.jlleitschuh.gradle.ktlint") version "11.6.1"
     id("io.gitlab.arturbosch.detekt") version "1.23.6"
 }
 
@@ -15,12 +16,6 @@ version = "0.0.1-SNAPSHOT"
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
-    }
-}
-
-configurations {
-    compileOnly {
-        extendsFrom(configurations.annotationProcessor.get())
     }
 }
 
@@ -34,6 +29,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
+    implementation("org.mapstruct:mapstruct:1.6.0")
+    kapt("org.mapstruct:mapstruct-processor:1.6.0")
     compileOnly("org.projectlombok:lombok")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     developmentOnly("org.springframework.boot:spring-boot-docker-compose")
@@ -59,6 +57,9 @@ ktlint {
     android.set(false)
     outputToConsole.set(true)
     outputColorName.set("RED")
+    filter {
+        exclude("build/generated/**")
+    }
 }
 
 detekt {
@@ -71,11 +72,15 @@ detekt {
     autoCorrect = true
 }
 
+kapt {
+    correctErrorTypes = true
+}
+
 tasks.withType<Detekt>().configureEach {
     reports {
-        html.required.set(true) // observe findings in your browser with structure and code snippets
-        xml.required.set(true) // checkstyle like format mainly for integrations like Jenkins
+        html.required.set(true)
+        xml.required.set(true)
         sarif.required.set(true)
-        md.required.set(true) // simple Markdown format
+        md.required.set(true)
     }
 }
