@@ -1,9 +1,11 @@
 package com.rbbozkurt.openbankingapi.controller.plaid.auth.sandbox
 
 import com.rbbozkurt.openbankingapi.dto.plaid.auth.PlaidAuthRequestDto
-import com.rbbozkurt.openbankingapi.dto.plaid.auth.PlaidAuthResponseDto
+import com.rbbozkurt.openbankingapi.dto.plaid.error.PlaidErrorResponseDto
 import com.rbbozkurt.openbankingapi.service.plaid.auth.interfaces.PlaidAuthService
+import com.rbbozkurt.openbankingapi.service.plaid.exception.PlaidServiceException
 import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -19,7 +21,17 @@ class PlaidSandboxAuthController(
     @PostMapping
     fun authenticate(
         @RequestBody request: PlaidAuthRequestDto,
-    ): Mono<PlaidAuthResponseDto> {
+    ): Mono<ResponseEntity<Any>> {
         return plaidAuthService.authenticateSandbox(request)
+            .map { ResponseEntity.ok(it as Any) }
+            .onErrorResume(PlaidServiceException::class.java) { ex ->
+                val responseBody =
+                    PlaidErrorResponseDto(
+                        "Plaid Auth Error",
+                        ex.statusCode,
+                        ex.details,
+                    )
+                Mono.just(ResponseEntity.status(ex.statusCode).body(responseBody))
+            }
     }
 }
