@@ -27,7 +27,6 @@ class PlaidSandboxAuthService(
                     plaidAuthMapper.toPlaidAuthResponse(exchangeTokenResp, pubTokenResp.publicToken)
                 }
             }
-            .map { plaidAuthMapper.toPlaidAuthResponse(it) }
             .onErrorMap(PlaidClientException::class.java, PlaidClientExceptionHandler::toServiceException)
     }
 }
