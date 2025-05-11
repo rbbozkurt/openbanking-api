@@ -16,5 +16,7 @@ class PlaidProperties {
     class EndpointProperties {
         lateinit var publicTokenCreate: String
         lateinit var publicTokenExchange: String
+        lateinit var transactionsSync: String
+        lateinit var transactionsGet: String
     }
 }

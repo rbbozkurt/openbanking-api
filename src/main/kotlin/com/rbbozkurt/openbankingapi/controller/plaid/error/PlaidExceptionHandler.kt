@@ -1,7 +1,8 @@
-package com.rbbozkurt.openbankingapi.controller.plaid.auth.error
-import com.rbbozkurt.openbankingapi.client.plaid.auth.exception.PlaidAuthClientException
-import com.rbbozkurt.openbankingapi.dto.plaid.auth.PlaidAuthErrorResponseDto
-import com.rbbozkurt.openbankingapi.service.plaid.auth.exception.PlaidAuthServiceException
+package com.rbbozkurt.openbankingapi.controller.plaid.error
+
+import com.rbbozkurt.openbankingapi.client.plaid.exception.PlaidClientException
+import com.rbbozkurt.openbankingapi.dto.plaid.error.PlaidErrorResponseDto
+import com.rbbozkurt.openbankingapi.service.plaid.exception.PlaidServiceException
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -10,13 +11,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 import reactor.core.publisher.Mono
 
 @RestControllerAdvice
-class PlaidAuthExceptionHandler {
-    private val logger = LoggerFactory.getLogger(PlaidAuthExceptionHandler::class.java)
+class PlaidExceptionHandler {
+    private val logger = LoggerFactory.getLogger(PlaidExceptionHandler::class.java)
 
-    @ExceptionHandler(PlaidAuthClientException::class)
-    fun handlePlaidAuthClientException(ex: PlaidAuthClientException): Mono<ResponseEntity<PlaidAuthErrorResponseDto>> {
+    @ExceptionHandler(PlaidClientException::class)
+    fun handlePlaidClientException(ex: PlaidClientException): Mono<ResponseEntity<PlaidErrorResponseDto>> {
         val responseBody =
-            PlaidAuthErrorResponseDto(
+            PlaidErrorResponseDto(
                 "Plaid Auth Error",
                 ex.statusCode,
                 ex.details,
@@ -25,10 +26,10 @@ class PlaidAuthExceptionHandler {
         return Mono.just(ResponseEntity.status(ex.statusCode).body(responseBody))
     }
 
-    @ExceptionHandler(PlaidAuthServiceException::class)
-    fun handlePlaidAuthServiceException(ex: PlaidAuthServiceException): Mono<ResponseEntity<PlaidAuthErrorResponseDto>> {
+    @ExceptionHandler(PlaidServiceException::class)
+    fun handlePlaidServiceException(ex: PlaidServiceException): Mono<ResponseEntity<PlaidErrorResponseDto>> {
         val responseBody =
-            PlaidAuthErrorResponseDto(
+            PlaidErrorResponseDto(
                 "Internal Server Error",
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 ex.details,
