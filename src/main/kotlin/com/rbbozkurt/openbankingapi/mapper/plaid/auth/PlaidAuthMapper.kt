@@ -23,5 +23,8 @@ interface PlaidAuthMapper {
     ): ExchangeTokenRequest
 
     // ExchangeTokenResponse → PlaidAuthResponse
-    fun toPlaidAuthResponse(response: ExchangeTokenResponse): PlaidAuthResponseDto
+    fun toPlaidAuthResponse(
+        response: ExchangeTokenResponse,
+        publicToken: String,
+    ): PlaidAuthResponseDto
 }
