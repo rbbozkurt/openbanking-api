@@ -78,6 +78,7 @@ Image Source: **Artifact Registry**
 - Code owners:
     - `@rbbozkurt`
     - `@evgenyim`
+    - `@Sof01`
 - Verified deployments only mergeable with passing checks
 
 ---
