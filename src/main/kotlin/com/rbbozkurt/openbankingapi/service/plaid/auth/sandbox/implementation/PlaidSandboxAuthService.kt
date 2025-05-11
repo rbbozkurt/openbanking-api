@@ -19,8 +19,11 @@ class PlaidSandboxAuthService(
     override fun authenticateSandbox(request: PlaidAuthRequestDto): Mono<PlaidAuthResponseDto> {
         return plaidAuthClient.createSandboxPublicToken(plaidAuthMapper.toCreatePublicTokenRequest(request))
             .flatMap { pubTokenResp ->
-                plaidAuthClient.exchangePublicToken(plaidAuthMapper.toExchangeTokenRequest(pubTokenResp, request.clientId, request.secret))
+                plaidAuthClient.exchangePublicToken(
+                    plaidAuthMapper.toExchangeTokenRequest(pubTokenResp, request.clientId, request.secret),
+                ).map { exchangeTokenResp ->
+                    plaidAuthMapper.toPlaidAuthResponse(exchangeTokenResp, pubTokenResp.publicToken)
+                }
             }
-            .map { plaidAuthMapper.toPlaidAuthResponse(it) }
     }
 }
