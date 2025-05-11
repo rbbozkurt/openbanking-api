@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono
 
 @Component
 @Qualifier("plaidSandboxTransactionsClient")
-class PlaidSanboxTransactionsClient(
+class PlaidSandboxTransactionsClient(
     @Qualifier("plaidSandboxWebClient") override val webClient: WebClient,
     override val plaidProperties: PlaidProperties,
 ) : PlaidBaseClient(webClient, plaidProperties), PlaidTransactionsClient {
