@@ -22,16 +22,21 @@ class PlaidSandboxAuthController(
     fun authenticate(
         @RequestBody request: PlaidAuthRequestDto,
     ): Mono<ResponseEntity<Any>> {
-        return plaidAuthService.authenticateSandbox(request)
+        return handleRequest { plaidAuthService.authenticateSandbox(request) }
+
+    }
+
+    private fun <T> handleRequest(serviceCall: () -> Mono<T>): Mono<ResponseEntity<Any>> {
+        return serviceCall()
             .map { ResponseEntity.ok(it as Any) }
             .onErrorResume(PlaidServiceException::class.java) { ex ->
-                val responseBody =
-                    PlaidErrorResponseDto(
-                        "Plaid Auth Error",
-                        ex.statusCode,
-                        ex.details,
-                    )
-                Mono.just(ResponseEntity.status(ex.statusCode).body(responseBody))
+                val errorDto = PlaidErrorResponseDto(
+                    "Plaid Auth Error",
+                    ex.statusCode,
+                    ex.details,
+                )
+                Mono.just(ResponseEntity.status(ex.statusCode).body(errorDto))
             }
     }
+
 }
