@@ -1,0 +1,12 @@
+package com.rbbozkurt.openbankingapi.dto.plaid.transactions
+
+import com.rbbozkurt.openbankingapi.client.plaid.transactions.dto.TransactionsGetRequest
+import com.rbbozkurt.openbankingapi.client.plaid.transactions.dto.TransactionsGetResponse
+import com.rbbozkurt.openbankingapi.client.plaid.transactions.dto.TransactionsSyncRequest
+import com.rbbozkurt.openbankingapi.client.plaid.transactions.dto.TransactionsSyncResponse
+
+typealias PlaidTransactionsGetResponseDto = TransactionsGetResponse
+typealias PlaidTransactionsGetRequestDto = TransactionsGetRequest
+
+typealias PlaidTransactionsSyncResponseDto = TransactionsSyncResponse
+typealias PlaidTransactionsSyncRequestDto = TransactionsSyncRequest
